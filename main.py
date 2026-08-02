@@ -1,8 +1,3 @@
-"""
-Bot Discord — exotichazle
-Tout-en-un : config, base de données, modération, tickets, Twitch, planning, logs, vocal privé.
-"""
-
 import asyncio
 import io
 import os
