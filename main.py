@@ -1564,37 +1564,33 @@ class Logs(commands.Cog):
 
         @commands.Cog.listener()
         async def on_member_join(self, member: discord.Member):
-            print(f"[JOIN] Événement reçu pour {member} sur {member.guild.name}")
+            print(f"[JOIN] {member} vient de rejoindre")
 
             ch = member.guild.get_channel(LOG_MEMBRES_CHANNEL_ID)
-
             if ch is None:
-                print(
-                    f"[JOIN] Salon introuvable : {LOG_MEMBRES_CHANNEL_ID} "
-                    f"sur le serveur {member.guild.id}"
-                )
+                print(f"[JOIN] Salon introuvable : {LOG_MEMBRES_CHANNEL_ID}")
                 return
 
-            embed = discord.Embed(
-                title="✅ Membre rejoint",
-                color=discord.Color.green(),
-                timestamp=datetime.utcnow()
-            )
-            embed.set_author(name=str(member), icon_url=member.display_avatar.url)
-            embed.add_field(name="Membre", value=member.mention, inline=True)
-            embed.add_field(name="ID", value=str(member.id), inline=True)
-            embed.add_field(
-                name="Compte créé",
-                value=discord.utils.format_dt(member.created_at, style="R"),
-                inline=False
-            )
-
             try:
+                embed = discord.Embed(
+                    title="✅ Membre rejoint",
+                    description=f"{member.mention} vient de rejoindre le serveur.",
+                    color=discord.Color.green()
+                )
+
+                embed.add_field(
+                    name="ID",
+                    value=str(member.id),
+                    inline=True
+                )
+
+                embed.set_thumbnail(url=member.display_avatar.url)
+
                 await ch.send(embed=embed)
-            except discord.Forbidden:
-                print("[JOIN] Permissions insuffisantes dans le salon de logs")
+                print("[JOIN] Log envoyé avec succès")
+
             except Exception as error:
-                print(f"[JOIN] Erreur : {error!r}")
+                print(f"[JOIN] ERREUR : {type(error).__name__}: {error}")
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: discord.Member):
