@@ -1729,10 +1729,7 @@ class VoicePrivate(commands.Cog):
 
 class DiscordBot(commands.Bot):
     def __init__(self):
-        intents = discord.Intents.default()
-        intents.members = True
-        intents.message_content = True
-        intents.reactions = True
+        intents = discord.Intents.all()
         super().__init__(command_prefix=PREFIX, intents=intents,
                          case_insensitive=True, help_command=None)
 
