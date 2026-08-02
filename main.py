@@ -1747,6 +1747,22 @@ class DiscordBot(commands.Bot):
             await self.add_cog(CogClass(self))
             print(f"[Bot] ✅ Cog chargé : {CogClass.__name__}")
 
+    class DiscordBot(commands.Bot):
+        def __init__(self):
+            # code existant...
+            pass
+
+        async def setup_hook(self):
+            # code existant...
+            pass
+
+        async def on_socket_event_type(self, event_type):
+            if event_type in ("GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE"):
+                print(f"[DISCORD] Événement reçu : {event_type}")
+
+        async def on_ready(self):
+            print(f"[Bot] Connecté en tant que {self.user} (ID: {self.user.id})")
+    
     async def on_ready(self):
         print(f"[Bot] Connecté en tant que {self.user} (ID: {self.user.id})")
         await self.change_presence(
