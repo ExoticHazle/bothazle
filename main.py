@@ -1772,6 +1772,23 @@ async def main():
         embed.set_footer(text=f"Préfixe : {PREFIX} | Bot — exotichazle")
         await ctx.send(embed=embed)
 
+    # ── Serveur HTTP keep-alive (requis pour Render Web Service) ──────────────
+    from aiohttp import web as aiohttp_web
+
+    async def health(request):
+        return aiohttp_web.Response(text="✅ Bot en ligne", content_type="text/plain")
+
+    app = aiohttp_web.Application()
+    app.router.add_get("/", health)
+    app.router.add_get("/health", health)
+
+    port = int(os.environ.get("PORT", 5000))
+    runner = aiohttp_web.AppRunner(app)
+    await runner.setup()
+    site = aiohttp_web.TCPSite(runner, "0.0.0.0", port)
+    await site.start()
+    print(f"[Web] ✅ Serveur HTTP démarré sur le port {port}")
+
     async with bot:
         await bot.start(DISCORD_TOKEN)
 
